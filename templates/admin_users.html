@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}จัดการผู้ใช้{% endblock %}
+{% block content %}
+<div class="page-heading"><h2>จัดการผู้ใช้</h2><p>เพิ่มบัญชีและกำหนดสิทธิ์การใช้งาน</p></div>
+<div class="row g-4"><div class="col-lg-4"><div class="card border-0 shadow-sm"><div class="card-body p-4"><h5>เพิ่มผู้ใช้</h5>
+<form method="post" action="{{ url_for('create_user') }}">
+<input class="form-control mb-2" name="username" placeholder="Username" required>
+<input class="form-control mb-2" name="fullname" placeholder="ชื่อ-นามสกุล" required>
+<input class="form-control mb-2" name="email" type="email" placeholder="Email">
+<input class="form-control mb-2" name="password" type="password" placeholder="Password" required>
+<select class="form-select mb-3" name="role"><option value="teacher">ครู / บุคลากร</option><option value="technician">เจ้าหน้าที่ซ่อม</option><option value="admin">ผู้ดูแลระบบ</option></select>
+<button class="btn btn-primary w-100">เพิ่มผู้ใช้</button></form></div></div></div>
+<div class="col-lg-8"><div class="card border-0 shadow-sm"><div class="card-body p-0"><div class="table-responsive"><table class="table align-middle mb-0"><thead><tr><th>ชื่อ</th><th>Username</th><th>Role</th><th></th></tr></thead><tbody>
+{% for u in users %}<tr><td>{{ u.fullname }}<br><small>{{ u.email or '' }}</small></td><td>{{ u.username }}</td><td><span class="badge bg-secondary">{{ role_label[u.role] }}</span></td><td>{% if u.id != current_user.id %}<form method="post" action="{{ url_for('delete_user', user_id=u.id) }}" onsubmit="return confirmDelete(event,'ลบผู้ใช้นี้?')"><button class="btn btn-sm btn-outline-danger">ลบ</button></form>{% endif %}</td></tr>{% endfor %}
+</tbody></table></div></div></div></div></div>
+{% endblock %}

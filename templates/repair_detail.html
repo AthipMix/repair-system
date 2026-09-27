@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}{{ repair.request_no }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3"><div><span class="text-muted">ใบแจ้งซ่อม</span><h2 class="mb-0">{{ repair.request_no }}</h2></div>
+<a class="btn btn-outline-dark" target="_blank" href="{{ url_for('print_repair', repair_id=repair.id) }}">🖨️ พิมพ์</a></div>
+<div class="row g-4">
+<div class="col-lg-8">
+<div class="card border-0 shadow-sm mb-4"><div class="card-body p-4">
+<div class="d-flex justify-content-between"><h5>รายละเอียดปัญหา</h5><span class="badge status-{{ repair.status }}">{{ status_label[repair.status] }}</span></div>
+<div class="detail-grid mt-3">
+<div><small>ผู้แจ้ง</small><strong>{{ repair.requester_name or repair.requester.fullname }}</strong></div>
+<div><small>สถานที่</small><strong>{{ repair.building }} / {{ repair.room }}</strong></div>
+<div><small>ประเภท</small><strong>{{ problem_label[repair.problem_type] }}</strong></div>
+<div><small>ความเร่งด่วน</small><strong>{{ urgency_label[repair.urgency] }}</strong></div>
+<div><small>ผู้รับผิดชอบ</small><strong>{{ repair.technician.fullname if repair.technician else 'ยังไม่มอบหมาย' }}</strong></div>
+<div><small>กำหนดเสร็จ</small><strong>{{ repair.due_date.strftime('%d/%m/%Y') if repair.due_date else '-' }}</strong></div>
+</div><hr><p class="description">{{ repair.description }}</p>
+{% if repair.result %}<div class="result-box"><b>ผลการซ่อม:</b><br>{{ repair.result }}{% if repair.cost is not none %}<br><b>ค่าใช้จ่าย:</b> {{ "%.2f"|format(repair.cost) }} บาท{% endif %}</div>{% endif %}
+</div></div>
+
+<div class="card border-0 shadow-sm mb-4"><div class="card-body p-4"><h5 class="mb-3">รูปภาพ</h5>
+<div class="row g-3">
+{% for type,label in [('before','ก่อนซ่อม'),('after','หลังซ่อม')] %}
+<div class="col-md-6"><h6>{{ label }}</h6><div class="image-grid">
+{% for img in repair.images if img.image_type == type %}<a href="{{ url_for('static', filename=img.image_path) }}" target="_blank"><img src="{{ url_for('static', filename=img.image_path) }}"></a>{% else %}<div class="image-empty">ยังไม่มีรูป</div>{% endfor %}
+</div></div>{% endfor %}
+</div>
+{% if current_user.is_authenticated %}<form class="mt-4" method="post" enctype="multipart/form-data" action="{{ url_for('upload_images', repair_id=repair.id) }}">
+<div class="row g-2"><div class="col-md-5"><input type="file" name="before_images" multiple class="form-control" accept="image/*"></div><div class="col-md-5"><input type="file" name="after_images" multiple class="form-control" accept="image/*"></div><div class="col-md-2"><button class="btn btn-outline-primary w-100">อัปโหลด</button></div></div>
+</form></div></div>
+
+<div class="card border-0 shadow-sm"><div class="card-body p-4"><h5>ความคิดเห็น</h5>
+{% if current_user.is_authenticated %}{% for c in repair.comments %}<div class="comment"><b>{{ c.user.fullname }}</b><small>{{ c.created_at.strftime('%d/%m/%Y %H:%M') }}</small><p>{{ c.comment }}</p></div>{% else %}<p class="text-muted">ยังไม่มีความคิดเห็น</p>{% endfor %}
+<form method="post" action="{{ url_for('add_comment', repair_id=repair.id) }}"><div class="input-group"><input name="comment" class="form-control" placeholder="พิมพ์ความคิดเห็น..." required><button class="btn btn-dark">ส่ง</button></div></form>{% else %}<p class="text-muted">เข้าสู่ระบบเจ้าหน้าที่เพื่อดูและเพิ่มความคิดเห็น</p>{% endif %}
+</div></div>
+</div>
+
+<div class="col-lg-4">
+{% if current_user.is_authenticated and current_user.role == 'admin' %}
+<div class="card border-0 shadow-sm mb-4"><div class="card-body p-4"><h5>มอบหมายงาน</h5>
+<form method="post" action="{{ url_for('assign_repair', repair_id=repair.id) }}">
+<label class="form-label">เจ้าหน้าที่</label><select name="technician_id" class="form-select mb-2" required><option value="">เลือก</option>{% for t in technicians %}<option value="{{ t.id }}" {{ 'selected' if repair.assigned_to==t.id }}>{{ t.fullname }}</option>{% endfor %}</select>
+<label class="form-label">กำหนดเสร็จ</label><input type="date" name="due_date" class="form-control mb-3" value="{{ repair.due_date.isoformat() if repair.due_date else '' }}">
+<button class="btn btn-primary w-100">มอบหมาย</button></form></div></div>
+{% endif %}
+
+{% if current_user.is_authenticated and repair.status in ['accepted','in_progress'] and (current_user.role == 'technician' and repair.assigned_to == current_user.id or current_user.role == 'admin') %}
+<div class="card border-0 shadow-sm"><div class="card-body p-4"><h5>อัปเดตงาน</h5>
+<form method="post" action="{{ url_for('update_status', repair_id=repair.id) }}">
+{% if repair.status == 'accepted' %}
+<input type="hidden" name="status" value="in_progress"><button class="btn btn-warning w-100">🔧 เริ่มดำเนินการ</button>
+{% else %}
+<input type="hidden" name="status" value="completed">
+<label class="form-label">ค่าใช้จ่าย</label><input name="cost" type="number" step="0.01" class="form-control mb-2">
+<label class="form-label">ผลการซ่อม</label><textarea name="result" class="form-control mb-3" rows="4" required></textarea>
+<button class="btn btn-success w-100">✅ ปิดงาน / ซ่อมเสร็จ</button>
+{% endif %}</form></div></div>
+{% endif %}
+</div></div>
+{% endblock %}

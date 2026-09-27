@@ -1,0 +1,9 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><title>{{ repair.request_no }}</title>
+<style>body{font-family:Arial,'Noto Sans Thai',sans-serif;padding:35px;color:#222}h1{text-align:center}.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:25px 0}.box{border:1px solid #ddd;padding:12px}.full{grid-column:1/-1}.line{border-bottom:1px solid #aaa;min-height:100px;padding:10px}table{width:100%;border-collapse:collapse}td,th{border:1px solid #aaa;padding:10px;text-align:left}@media print{button{display:none}}</style></head>
+<body><button onclick="window.print()">พิมพ์ / Save PDF</button><h1>ใบแจ้งซ่อม</h1><h2 style="text-align:center">{{ repair.request_no }}</h2>
+<div class="grid"><div class="box"><b>ผู้แจ้ง</b><br>{{ repair.requester.fullname }}</div><div class="box"><b>วันที่แจ้ง</b><br>{{ repair.created_at.strftime('%d/%m/%Y %H:%M') }}</div>
+<div class="box"><b>สถานที่</b><br>{{ repair.building }} / {{ repair.room }}</div><div class="box"><b>สถานะ</b><br>{{ status_label[repair.status] }}</div>
+<div class="box full"><b>ประเภทปัญหา</b><br>{{ problem_label[repair.problem_type] }}</div><div class="box full"><b>รายละเอียด</b><div class="line">{{ repair.description }}</div></div>
+<div class="box"><b>ผู้รับผิดชอบ</b><br>{{ repair.technician.fullname if repair.technician else '-' }}</div><div class="box"><b>กำหนดเสร็จ</b><br>{{ repair.due_date.strftime('%d/%m/%Y') if repair.due_date else '-' }}</div>
+<div class="box full"><b>ผลการซ่อม</b><div class="line">{{ repair.result or '-' }}</div></div><div class="box"><b>ค่าใช้จ่าย</b><br>{{ "%.2f"|format(repair.cost) if repair.cost is not none else '-' }} บาท</div>
+</div></body></html>

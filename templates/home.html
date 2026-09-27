@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}ระบบการแจ้งซ่อม · แจ้งปัญหาได้ง่าย ติดตามได้ทุกขั้นตอน{% endblock %}
+{% block content %}
+<section class="public-hero">
+<div class="container hero-layout">
+<div class="hero-copy">
+<div class="eyebrow">SCHOOL REPAIR SERVICE</div>
+<h1>พบปัญหาในโรงเรียน?<br><span>แจ้งซ่อมได้ทันที</span></h1>
+<p>แจ้งปัญหาไฟฟ้า ห้องเรียน คอมพิวเตอร์ เครื่องปรับอากาศ และงานซ่อมต่าง ๆ ผ่านระบบออนไลน์ พร้อมติดตามสถานะงานได้โดยไม่ต้องเดินเอกสาร</p>
+<div class="hero-actions"><a class="btn btn-primary btn-lg" href="{{ url_for('create_repair') }}">🔧 แจ้งซ่อมทันที <span>→</span></a><a class="btn btn-outline-light btn-lg" href="{{ url_for('track_repair') }}">ติดตามงาน</a></div>
+<div class="hero-note"><span>✓ ไม่ต้องสมัครสมาชิก</span><span>✓ แจ้งได้จากมือถือ</span><span>✓ มีเลขที่ใบแจ้งซ่อมสำหรับติดตาม</span></div>
+</div>
+<div class="hero-panel">
+<div class="hero-panel-glow"></div><div class="service-card">
+<div class="service-head"><div><small>สถานะระบบ</small><b>พร้อมรับแจ้งซ่อม</b></div><span class="online-dot">● ออนไลน์</span></div>
+<div class="service-big"><span>🔧</span><div><b>แจ้งซ่อมออนไลน์</b><small>กรอกข้อมูลปัญหาและส่งเรื่องให้เจ้าหน้าที่</small></div></div>
+<div class="service-steps"><div class="active"><span>1</span>แจ้งปัญหา</div><div><span>2</span>รับเรื่อง</div><div><span>3</span>ดำเนินการ</div><div><span>4</span>เสร็จสิ้น</div></div>
+<div class="service-mini"><span>📍 อาคาร / ห้อง</span><span>📸 แนบรูป</span><span>⚡ ความเร่งด่วน</span></div>
+</div></div>
+</div></section>
+
+<section class="quick-section"><div class="container"><div class="section-title"><div class="eyebrow">เริ่มต้นใช้งาน</div><h2>คุณต้องการทำอะไร?</h2><p>เลือกเมนูที่ตรงกับสิ่งที่ต้องการได้เลย ไม่ต้องค้นหาเมนูให้ยุ่งยาก</p></div>
+<div class="quick-grid">
+<a class="quick-card primary" href="{{ url_for('create_repair') }}"><div class="quick-icon">🔧</div><div><span class="quick-kicker">สำหรับผู้แจ้ง</span><h3>แจ้งปัญหา / แจ้งซ่อม</h3><p>กรอกสถานที่ รายละเอียดปัญหา และแนบรูปได้ทันที</p></div><strong>→</strong></a>
+<a class="quick-card" href="{{ url_for('track_repair') }}"><div class="quick-icon">🔎</div><div><span class="quick-kicker">ตรวจสอบงาน</span><h3>ติดตามสถานะการซ่อม</h3><p>ใช้เลขที่ใบแจ้งซ่อมเพื่อตรวจสอบความคืบหน้า</p></div><strong>→</strong></a>
+<a class="quick-card" href="{{ url_for('auth_login') }}"><div class="quick-icon">👨‍💼</div><div><span class="quick-kicker">สำหรับเจ้าหน้าที่</span><h3>เข้าสู่ศูนย์จัดการงาน</h3><p>Admin, ครู และเจ้าหน้าที่ซ่อมเข้าสู่ระบบเพื่อจัดการงาน</p></div><strong>→</strong></a>
+</div></div></section>
+
+<section class="info-section"><div class="container"><div class="section-title"><div class="eyebrow">ระบบช่วยอะไรได้บ้าง</div><h2>จัดการงานซ่อมตั้งแต่ต้นจนจบ</h2></div>
+<div class="feature-grid"><article class="feature-card"><div class="feature-icon blue-bg">📝</div><h3>แจ้งปัญหาเป็นขั้นตอน</h3><p>ระบุอาคาร ห้อง ประเภทปัญหา ความเร่งด่วน และรายละเอียดที่จำเป็น</p></article><article class="feature-card"><div class="feature-icon purple-bg">📋</div><h3>รับเรื่องและมอบหมาย</h3><p>เจ้าหน้าที่ตรวจสอบรายการและมอบหมายงานให้ช่างที่รับผิดชอบ</p></article><article class="feature-card"><div class="feature-icon green-bg">📊</div><h3>ติดตามสถานะ</h3><p>สถานะแสดงเป็นลำดับตั้งแต่รอรับเรื่องจนถึงซ่อมเสร็จ</p></article><article class="feature-card"><div class="feature-icon orange-bg">📸</div><h3>เก็บหลักฐานงาน</h3><p>แนบรูปก่อนและหลังซ่อม พร้อมผลการซ่อมและค่าใช้จ่าย</p></article></div></div></section>
+
+<section class="workflow-section"><div class="container"><div class="workflow-head"><div><div class="eyebrow">WORKFLOW</div><h2>ขั้นตอนการแจ้งซ่อม</h2></div><a href="{{ url_for('create_repair') }}" class="btn btn-primary">เริ่มแจ้งซ่อม →</a></div>
+<div class="workflow"><div class="workflow-item active"><span>01</span><b>แจ้งปัญหา</b><p>กรอกข้อมูลและส่งใบแจ้งซ่อม</p></div><div class="workflow-line"></div><div class="workflow-item"><span>02</span><b>รับเรื่อง</b><p>เจ้าหน้าที่ตรวจสอบและรับงาน</p></div><div class="workflow-line"></div><div class="workflow-item"><span>03</span><b>ดำเนินการ</b><p>ช่างเข้าตรวจและซ่อม</p></div><div class="workflow-line"></div><div class="workflow-item"><span>04</span><b>เสร็จสิ้น</b><p>บันทึกผลและปิดงาน</p></div></div></div></section>
+
+<section class="public-cta"><div class="container"><div><div class="eyebrow">READY?</div><h2>มีปัญหาอะไร แจ้งได้เลย</h2><p>ไม่ต้อง Login และไม่ต้องสมัครสมาชิกก่อนแจ้งซ่อม</p></div><a class="btn btn-light btn-lg" href="{{ url_for('create_repair') }}">แจ้งซ่อมตอนนี้ →</a></div></section>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}แจ้งซ่อม · ระบบการแจ้งซ่อม{% endblock %}
+{% block content %}
+<div class="form-page"><div class="container">
+<div class="form-top"><div><div class="eyebrow">NEW REPAIR REQUEST</div><h1>แจ้งปัญหา / แจ้งซ่อม</h1><p>กรอกข้อมูลให้ครบ เพื่อให้เจ้าหน้าที่เข้าใจปัญหาและเข้าดำเนินการได้เร็วขึ้น</p></div><div class="step-chip"><span>ขั้นตอนที่ 1</span><b>ส่งใบแจ้งซ่อม</b></div></div>
+<form method="post" enctype="multipart/form-data" class="row g-4">
+<div class="col-lg-8"><div class="form-card">
+<div class="form-section"><div class="section-number">01</div><div><h3>ข้อมูลผู้แจ้ง</h3><p>ไม่ต้อง Login กรอกเพียงชื่อสำหรับติดต่อกลับ</p></div></div>
+<div class="row g-3"><div class="col-md-6"><label class="form-label">ชื่อผู้แจ้ง *</label><input name="requester_name" class="form-control" placeholder="เช่น สมชาย ใจดี" required></div><div class="col-md-6"><label class="form-label">ช่องทางติดต่อ</label><input name="requester_contact" class="form-control" placeholder="เบอร์โทร / LINE / ห้องพักครู"></div></div>
+<hr>
+<div class="form-section"><div class="section-number">02</div><div><h3>สถานที่เกิดปัญหา</h3><p>ระบุตำแหน่งให้ช่างหาได้ง่าย</p></div></div>
+<div class="row g-3"><div class="col-md-6"><label class="form-label">อาคาร *</label><input name="building" class="form-control" placeholder="เช่น อาคาร 3" required></div><div class="col-md-6"><label class="form-label">ห้อง / จุดที่พบปัญหา *</label><input name="room" class="form-control" placeholder="เช่น ห้อง 301" required></div></div>
+<hr>
+<div class="form-section"><div class="section-number">03</div><div><h3>รายละเอียดปัญหา</h3><p>ช่วยอธิบายอาการที่เกิดขึ้น</p></div></div>
+<div class="row g-3"><div class="col-md-6"><label class="form-label">ประเภทปัญหา *</label><select name="problem_type" class="form-select" required><option value="">เลือกประเภทปัญหา</option>{% for k,v in problem_label.items() %}<option value="{{ k }}">{{ v }}</option>{% endfor %}</select></div><div class="col-md-6"><label class="form-label">ความเร่งด่วน</label><select name="urgency" class="form-select"><option value="low">ต่ำ — สามารถรอได้</option><option value="medium" selected>ปานกลาง — ควรดำเนินการเร็ว</option><option value="high">สูง — กระทบการใช้งาน</option></select></div><div class="col-12"><label class="form-label">รายละเอียดปัญหา *</label><textarea name="description" class="form-control" rows="6" placeholder="เช่น เปิดแอร์แล้วไม่มีลมเย็น มีเสียงผิดปกติ..." required></textarea></div></div>
+<hr>
+<div class="form-section"><div class="section-number">04</div><div><h3>รูปภาพประกอบ</h3><p>ถ้ามีรูปปัญหาจะช่วยให้ช่างประเมินได้ง่ายขึ้น</p></div></div>
+<input type="file" name="before_images" class="form-control" accept=".jpg,.jpeg,.png,.gif,.webp" multiple><div class="upload-hint">รองรับ JPG, PNG, GIF, WEBP · เลือกได้หลายรูป</div>
+</div></div>
+<div class="col-lg-4"><div class="submit-card sticky-lg-top"><div class="submit-icon">🔧</div><h3>พร้อมส่งใบแจ้งซ่อม?</h3><p>หลังส่งระบบจะออก <b>เลขที่ใบแจ้งซ่อม</b> ให้คุณเก็บไว้ใช้ติดตามงาน</p><div class="submit-check"><span>✓</span> ไม่ต้อง Login</div><div class="submit-check"><span>✓</span> ตรวจสอบสถานะได้ภายหลัง</div><div class="submit-check"><span>✓</span> แนบรูปประกอบได้</div><button class="btn btn-primary btn-lg w-100 mt-3">ส่งใบแจ้งซ่อม →</button><a href="{{ url_for('index') }}" class="btn btn-link w-100 mt-2">กลับหน้าแรก</a></div></div>
+</form></div></div>
+{% endblock %}
